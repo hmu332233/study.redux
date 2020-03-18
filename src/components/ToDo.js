@@ -1,13 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { actionCreators } from '../store';
+
+import { Link } from 'react-router-dom';
 
 
 function Todo(props) {
   return (
     <li>
-      {props.text} <button onClick={props.onDeleteButtonClick}>DEL</button>
+      <Link to={`/${props.id}`}>
+        {props.text} <button onClick={props.onDeleteButtonClick}>DEL</button>
+      </Link>
     </li>
   );
 }
