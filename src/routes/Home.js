@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { actionCreators } from '../store';
 
+import ToDo from '../components/ToDo';
+
 function Home(props) {
   const [text, setText] = useState('');
   const onChange = e => {
@@ -20,7 +22,11 @@ function Home(props) {
         <input type="text" value={text} onChange={onChange} />
         <button>Add</button>
       </form>
-      <ul>{JSON.stringify(props.toDos)}</ul>
+      <ul>
+        {props.toDos.map(toDo => (
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
     </>
   );
 }
@@ -35,7 +41,8 @@ const mapStateToProps = (state, ownProps) => {
 // store의 dispatch를 props로 맵핑한다.
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    addToDo: text => dispatch(actionCreators.addToDo(text))
+    addToDo: text => dispatch(actionCreators.addToDo(text)),
+    deleteTodo: id => dispatch(actionCreators.deleteToDo(id)),
   };
 }
 
