@@ -28,7 +28,23 @@ const reducer = (state = [], action) => {
   }
 }
 
-const store = createStore(reducer);
+const LOCAL_STORAGE_KEY = 'toDos';
+
+const setStateToLocalStorage = state => {
+  localStorage.setItem(LOCAL_STORAGE_KEY, state);
+};
+
+const getStateFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+}
+
+const preloadedState = getStateFromLocalStorage();
+const store = createStore(reducer, preloadedState);
+
+store.subscribe(() => {
+  const state = store.getState();
+  setStateToLocalStorage(JSON.stringify(state));
+});
 
 export const actionCreators = {
   addToDo,
