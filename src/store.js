@@ -1,5 +1,5 @@
-import { createStore } from 'redux';
-import { createAction, createReducer } from '@reduxjs/toolkit';
+// import { createStore } from 'redux';
+import { createAction, createReducer, configureStore } from '@reduxjs/toolkit';
 
 
 
@@ -28,7 +28,10 @@ const getStateFromLocalStorage = () => {
 }
 
 const preloadedState = getStateFromLocalStorage();
-const store = createStore(reducer, preloadedState);
+const store = configureStore({
+  reducer,
+  preloadedState,
+});
 
 store.subscribe(() => {
   const state = store.getState();
