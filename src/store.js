@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, createReducer } from '@reduxjs/toolkit';
 
 
 
@@ -7,16 +7,15 @@ import { createAction } from '@reduxjs/toolkit';
 const addToDo = createAction('ADD');
 const deleteToDo = createAction('DELETE');
 
-const reducer = (state = [], action) => {
-  switch (action.type) {
-    case addToDo.type:
-      return [{ text: action.payload, id: Date.now() }, ...state];
-    case deleteToDo.type:
-      return state.filter(item => item.id !== action.payload);
-    default:
-      return state;
-  }
-}
+// 기존 state를 변경하거나 새 state를 리턴하거나 두 방법을 사용할 수 있음
+// 리턴하지 않으면 immer로 새로운 state를 리턴하도록 내부에서 동작함
+const reducer = createReducer([], {
+  [addToDo]: (state, action) => {
+    // 이런식으로 해도 내부에 immer가 있어서 새로운 state object로 리턴함
+    state.push({ text: action.payload, id: Date.now() });
+  },
+  [deleteToDo]: (state, action) => state.filter(item => item.id !== action.payload), 
+});
 
 const LOCAL_STORAGE_KEY = 'toDos';
 
