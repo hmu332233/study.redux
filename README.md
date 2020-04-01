@@ -5,4 +5,5 @@
   - projects/todo
 
 - **react redux**
-  - src (todo. react version)
+  - projects/todo-react (todo. react version)
+  - src (todo. react version with redux tookit)
