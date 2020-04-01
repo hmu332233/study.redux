@@ -1,8 +1,9 @@
 // import { createStore } from 'redux';
-import { createAction, createReducer, configureStore } from '@reduxjs/toolkit';
+// import { createAction, createReducer, configureStore } from '@reduxjs/toolkit';
+import { createSlice, configureStore } from '@reduxjs/toolkit';
 
 
-
+/*
 // action creators
 const addToDo = createAction('ADD');
 const deleteToDo = createAction('DELETE');
@@ -16,6 +17,19 @@ const reducer = createReducer([], {
   },
   [deleteToDo]: (state, action) => state.filter(item => item.id !== action.payload), 
 });
+*/
+
+const toDos = createSlice({
+  name: 'toDosReducer',
+  initialState: [],
+  reducers: {
+    add: (state, action) => {
+      state.push({ text: action.payload, id: Date.now() });
+    },
+    remove: (state, action) => state.filter(item => item.id !== action.payload), 
+  }
+});
+
 
 const LOCAL_STORAGE_KEY = 'toDos';
 
@@ -28,8 +42,12 @@ const getStateFromLocalStorage = () => {
 }
 
 const preloadedState = getStateFromLocalStorage();
+// const store = configureStore({
+//   reducer,
+//   preloadedState,
+// });
 const store = configureStore({
-  reducer,
+  reducer: toDos.reducer,
   preloadedState,
 });
 
@@ -38,9 +56,14 @@ store.subscribe(() => {
   setStateToLocalStorage(JSON.stringify(state));
 });
 
+// export const actionCreators = {
+//   addToDo,
+//   deleteToDo,
+// };
+const { add, remove } = toDos.actions;
 export const actionCreators = {
-  addToDo,
-  deleteToDo,
+  addToDo: add,
+  deleteToDo: remove,
 };
 
 export default store;
