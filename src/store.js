@@ -4,20 +4,21 @@ const toDoAdapter = createEntityAdapter({
   selectId: (toDo) => toDo.id,
 });
 
-export const toDoSelector = toDoAdapter.getSelectors();
+export const toDoSelector = toDoAdapter.getSelectors(state => state.toDos);
 
 const toDos = createSlice({
   name: 'toDosReducer',
-  initialState: toDoAdapter.getInitialState(),
+  initialState: {
+    toDos: toDoAdapter.getInitialState(),
+  },
   reducers: {
     add: (state, action) => {
-      console.log('asdfasdf')
       const toDo = { text: action.payload, id: Date.now() };
-      toDoAdapter.addOne(state, toDo);
+      toDoAdapter.addOne(state.toDos, toDo);
     },
     remove: (state, action) => {
       const id = action.payload;
-      toDoAdapter.removeOne(state, id);
+      toDoAdapter.removeOne(state.toDos, id);
     }, 
   }
 });
