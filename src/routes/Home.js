@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import { actionCreators } from '../store';
+import { actionCreators, toDoSelector } from '../store';
 
 import ToDo from '../components/ToDo';
 
@@ -35,7 +35,7 @@ function Home(props) {
 // state: from redux-store
 // ownProps: from parent component
 const mapStateToProps = (state, ownProps) => {
-  return { toDos: state };
+  return { toDos: toDoSelector.selectAll(state) };
 }
 
 // store의 dispatch를 props로 맵핑한다.

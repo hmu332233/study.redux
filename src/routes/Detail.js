@@ -2,6 +2,8 @@ import React from "react";
 
 import { connect } from "react-redux";
 
+import { toDoSelector } from '../store';
+
 function Detail(props) {
   return (
     <>
@@ -17,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
       params: { id }
     }
   } = ownProps;
-  return { toDo: state.find(todo => todo.id === parseInt(id)) };
+  return { toDo: toDoSelector.selectById(state, id) };
 };
 
 export default connect(mapStateToProps)(Detail);

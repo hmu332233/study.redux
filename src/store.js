@@ -1,32 +1,24 @@
-// import { createStore } from 'redux';
-// import { createAction, createReducer, configureStore } from '@reduxjs/toolkit';
-import { createSlice, configureStore } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter, configureStore } from '@reduxjs/toolkit';
 
-
-/*
-// action creators
-const addToDo = createAction('ADD');
-const deleteToDo = createAction('DELETE');
-
-// 기존 state를 변경하거나 새 state를 리턴하거나 두 방법을 사용할 수 있음
-// 리턴하지 않으면 immer로 새로운 state를 리턴하도록 내부에서 동작함
-const reducer = createReducer([], {
-  [addToDo]: (state, action) => {
-    // 이런식으로 해도 내부에 immer가 있어서 새로운 state object로 리턴함
-    state.push({ text: action.payload, id: Date.now() });
-  },
-  [deleteToDo]: (state, action) => state.filter(item => item.id !== action.payload), 
+const toDoAdapter = createEntityAdapter({
+  selectId: (toDo) => toDo.id,
 });
-*/
+
+export const toDoSelector = toDoAdapter.getSelectors();
 
 const toDos = createSlice({
   name: 'toDosReducer',
-  initialState: [],
+  initialState: toDoAdapter.getInitialState(),
   reducers: {
     add: (state, action) => {
-      state.push({ text: action.payload, id: Date.now() });
+      console.log('asdfasdf')
+      const toDo = { text: action.payload, id: Date.now() };
+      toDoAdapter.addOne(state, toDo);
     },
-    remove: (state, action) => state.filter(item => item.id !== action.payload), 
+    remove: (state, action) => {
+      const id = action.payload;
+      toDoAdapter.removeOne(state, id);
+    }, 
   }
 });
 
@@ -41,25 +33,19 @@ const getStateFromLocalStorage = () => {
   return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
 }
 
-const preloadedState = getStateFromLocalStorage();
-// const store = configureStore({
-//   reducer,
-//   preloadedState,
-// });
+// const preloadedState = getStateFromLocalStorage();
+
 const store = configureStore({
   reducer: toDos.reducer,
-  preloadedState,
+  // preloadedState,
 });
 
-store.subscribe(() => {
-  const state = store.getState();
-  setStateToLocalStorage(JSON.stringify(state));
-});
+// store.subscribe(() => {
+//   const state = store.getState();
+//   setStateToLocalStorage(JSON.stringify(state));
+// });
 
-// export const actionCreators = {
-//   addToDo,
-//   deleteToDo,
-// };
+
 const { add, remove } = toDos.actions;
 export const actionCreators = {
   addToDo: add,
